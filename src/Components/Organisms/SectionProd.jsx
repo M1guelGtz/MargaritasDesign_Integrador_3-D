@@ -4,6 +4,7 @@ import CardProductos from "../Molecules/CardProductos";
 function SectionProd(props){
     const [data, setData] = useState([]);
     const [bandera, setBandera] = useState(false)
+    
     useEffect(()=>{
         fetch(`${import.meta.env.VITE_URL_BACKEND}/productos`).then (response => {
             if(response.ok)
@@ -11,6 +12,7 @@ function SectionProd(props){
             }).then (datos => {
                 setData(datos)
                 setBandera(true)
+                console.log(data)
             }).catch(
                 error=>{
                     console.log(error)
@@ -18,20 +20,17 @@ function SectionProd(props){
             )
         },[bandera]
     );
+
     return (
         <div>
-            <div className="flex flex-wrap w-full justify-center    ">
-                <h2 className="w-full justify-center m-8 items-center text-3xl flex p-2 border border-black border-solid">Productos</h2>
-                <div className="flex flex-wrap w-5/6 justify-center">
-                    {
-                        data.map(element =>  <CardProductos val={bandera} fnVal={setBandera} id={element.id} text={ element.nombre} tipo={element.tipo} precio={'precio: $' + element.precio} descripcion={'En existencia: ' + element.cantidad + ', con cabado ' + element.acabado} ></CardProductos>)
-                    }
+            <div className=" flex flex-wrap w-full dekstop:justify-center   ">
+                <div className=" bg-gradient-to-r       w-full justify-evenly box-border m-8  items-center text-3xl flex p-2 border border-[#482D2E] border-solid  "><h2 className="text-[#482D2E] font-extrabold  w-11/12 text-center ">Productos</h2>
+                    <div className="w-1/12   justify-around">
+                        <Link to='/agregar_producto'><img  className="w-1/2" src="Agregar.png"/></Link>
+                    </div>
                 </div>
-                <div className="w-1/12 justify-around">
-                <Link to='/agregar_producto'>
-                    <img  className="w-1/2" src="icons8-añadir-48.png" alt="" />
-                </Link>
-                
+                <div className="mx-auto laptop:w-full  grid tablet:grid-cols-2  gap-4  justify-center bg-gradient-to-b from-white to-[#FC9939]">
+                    {data.map(element =>  <CardProductos src={element.url} val={bandera} style="cursor-pointer justify-evenly items-center  h-48  border border-solid border-black " fnVal={setBandera} id={element.id} text={ element.nombre} tipo={element.tipo} precio={ element.precio} cantidad={element.cantidad} descripcion={'Acabado ' + element.acabado} ></CardProductos>)}
                 </div>
             </div>
         </div>

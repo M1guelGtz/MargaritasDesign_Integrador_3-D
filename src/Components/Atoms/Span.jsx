@@ -1,7 +1,7 @@
-function Span (props) {
+function    Span (props) {
     return (
         <>
-        <span> {props.span} </span>
+            <span className={`text-center ${props.style}`}> {props.span} </span>
         </>
     )
 }

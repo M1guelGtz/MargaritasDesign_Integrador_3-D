@@ -1,104 +1,149 @@
-import { useState } from "react";
 import Swal from "sweetalert2";
-import Img from "../Atoms/Img";
+import Img from "../../pages/Img";
 import Span from "../Atoms/Span";
-import Text from "../Atoms/Text";
 import Title from "../Atoms/Title";
-function CardProductos (props) {
-    const [data, setData] = useState([]);
-    async function handkerClick(){
+
+function CardProductos(props) {
+    
+    let precio, cantidad
+
+    async function handleClick() {
         const { value: text } = await Swal.fire({
-            //------------- * Pantalla modal con info del producto * -----------//
             background: "#FDEBD0",
-            title: `${props.text}`,
+            title: `${props.text} de ${props.tipo}`,
+            width:"30%",
             html: `
-                <span>${props.precio}</span>
+                <span>Id para ${props.text} de ${props.tipo}: ${props.id}</span><br/><br/>
+                <span>$${props.precio}</span><br/><br/>
+                <span>Cantidad en existencia: ${props.cantidad}</span><br/><br/>
                 <span>${props.descripcion}</span>`,
             showCancelButton: true,
             cancelButtonText: "<img src='icons8-eliminar-50.png'/>",
-            cancelButtonColor:"transparent", 
+            cancelButtonColor: "transparent",
             confirmButtonText: "<img src='icons8-editar-50.png'/>",
-            confirmButtonColor:"transparent",
+            confirmButtonColor: "transparent",
         });
         if (text) {
-            const { value: formValues,} = await Swal.fire({
-                //--------------- * Pantalla modal para editar el producto * -----------
-                title: `${props.text}`,
+            const { value: formValues } = await Swal.fire({
+                title: `${props.text} de ${props.tipo}`,
                 background: "#FDEBD0",
-                showCloseButton:"close",
+                
                 html: `
-                    <input type='number' placeholder='nuevo precio para ${props.text}' required id="swal-input1" class="swal2-input">
-                    <input type='number' placeholder='Agregar a existenia' required id="swal-input2" class="swal2-input">`,
+                    <label> Precio: <br/>
+                        <input type='number' value="${props.precio}"  required id="swal-input1" class="swal2-input">
+                    </label><br/><br/>
+                    <label> Cantidad a agregar:
+                        <input  type='number'   required id="swal-input2" class="swal2-input">
+                    </label>`,
                 showCancelButton: true,
                 cancelButtonText: "<img src='icons8-cancelar-48.png'/>",
-                cancelButtonColor:"transparent",
+                cancelButtonColor: "transparent",
                 confirmButtonText: "<img src='icons8-aceptar-48.png'/>",
-                confirmButtonColor:"transparent",
+                confirmButtonColor: "transparent",
+                width: "500px",
                 focusConfirm: false,
                 preConfirm: () => {
-                return [
-                    document.getElementById("swal-input1").value,
-                    document.getElementById("swal-input2").value
-                ]}
+                    const nuevoPrecio = document.getElementById("swal-input1").value;
+                    const cantidadAAgregar = Number(document.getElementById("swal-input2").value);
+                    const nuevaCantidad = Number(props.cantidad) + cantidadAAgregar;
+                    precio = (nuevoPrecio);
+                    cantidad = (nuevaCantidad)
+                },
             });
             if (formValues) {
                 Swal.fire({
-                    //------------- * Pantalla modal cambios realizados * -----------//
                     background: "#FDEBD0",
-                    title: "Cambios guardados correctamente!",
-                    icon: "success"
+                    title: "¡Cambios guardados correctamente!",
+                    icon: "success",
+                    width:"30%",
+                });
+                console.log(precio + " = " + cantidad)
+                fetch(`${import.meta.env.VITE_URL_BACKEND}/productos/${props.id}`, {
+                    method: "PUT",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "Authorization": `${sessionStorage.getItem("token")}`,
+                        'Access-Control-Allow-Origin': '*'
+                    },
+                    body: JSON.stringify({
+                        "tipo": `${props.tipo}`,
+                        "nombre": `${props.text}`,
+                        "precio":   Number(precio),
+                        "cantidad": Number(cantidad),
+                        "acabado": `${props.acabado}`,
+                        "id_imagen" : 2,
+                    }),
                 })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('Network response was not ok.');
+                })
+                .then(data => {
+                    props.fnVal(!props.val);
+                })
+                .catch(error => {
+                    console.error('Error al intentar guardar los cambios:', error);
+                });
+                props.fnVal(!props.val);
             }
-            return
-        }else  {
+        } else {
             const { value: confirm } = await Swal.fire({
-                //------------- * Pantalla modal confirmar eliminacio * -----------//
-                title: `Seguro que desea eliminar ${props.text}`,
+                title: `¿Seguro que desea eliminar el producto "${props.text} de ${props.tipo}" de la existencia?`,
                 icon: "warning",
-                showCloseButton:"close",
                 showCancelButton: true,
                 background: "#FDEBD0",
-                cancelButtonText:"<img src='icons8-cancelar-48.png'/>" ,
-                cancelButtonColor:"transparent",
-                confirmButtonText:"<img src='icons8-aceptar-48.png'/>" ,
-                confirmButtonColor:"transparent",
+                cancelButtonText: "Cancelar",
+                cancelButtonColor: "gray",
+                confirmButtonText: "Confirmar",
+                confirmButtonColor: "red",
+                width:"30%",
             });
-            if (confirm){
-                fetch(`${import.meta.env.VITE_URL_BACKEND}/productos/${props.id}`,{
-                        method: "DELETE",
-                    }).then (response => {
-                    if(response.ok)
-                        return response.json()
-                    }).then (datos => {
-                        setData(datos)
-                        //console.log(data)
-                        props.fnVal(!props.val)
-                    }).catch(
-                        error=>{
-                            console.log(error)
-                        }
-                    )
+
+            if (confirm) {
+                fetch(`${import.meta.env.VITE_URL_BACKEND}/productos/${props.id}`, {
+                    method: "DELETE",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "Authorization": `${sessionStorage.getItem("token")}`,
+                        'Access-Control-Allow-Origin': '*'
+                        },
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('Network response was not ok.');
+                })
+                .then(datos => {
+                    setData(datos);
+                    console.log(datos)
+                    props.fnVal(!props.val);
+                })
+                .catch(error => {
+                    console.error('Error al intentar eliminar el producto:', error);
+                });
                 Swal.fire({
                     background: "#FDEBD0",
-                    title:"Producto eliminado",
-                    icon: "success"
-                })
-                
+                    title: "¡Producto eliminado!",
+                    icon: "sucggcess",
+                });
+                props.fnVal(!props.val)
             }
-            return
         }
     }
+
     return (
-        <div onClick={handkerClick}  className="flex cursor-pointer justify-evenly items-center w-5/12 m-5 border border-solid border-black bg-yellow-100 rounded-2xl">
-            <div className="w-1/3  ">
-                <Img img = 'Productos.png'></Img>
-            </div>
-            <div className="w-2/3 h-full flex flex-col items-center justify-around">
-                <Title text={"ID: "  + props.id + "   " + props.text + ' de ' + props.tipo}></Title>
-                <Span span={props.precio} ></Span>
-                <Text text={props.descripcion}></Text>
+        <div onClick={handleClick} className={props.style + "mx-auto  grid phone:w-3/4 tablet:w-full laptop:w-10/12 phone:grid-cols-2  border-2 border-[#FC9939] rounded-3xl bg-[#482D2E]"}>
+            <div className="w-5/6 box-border mx-auto"><Img img='Prod1.jpeg'></Img></div>
+            <div className="h-full flex flex-col items-center justify-around">
+                <Title text={`${props.text} de ${props.tipo}`} style='text-[#ffffff]'></Title>
+                <span className="text-4xl text-[#ffffff]" span>${props.precio}</span>
+                <Span span={`En existencia: ${props.cantidad}`} style='text-[#ffffff]'></Span>
             </div>
         </div>
-    )
+    );
 }
+
 export default CardProductos;
