@@ -1,13 +1,21 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    //Aqui van las variables para los colores bg-lime-200
-    extend: {},   
+    screens: {
+      phone: "320px",
+      tablet: "640px",
+      laptop: "1024px",
+      desktop: "1280px",
+    },
+    extend: {
+      backgroundColor: {
+        "custom-gradient": "linear-gradient(98deg, #ffab01, #fdc700, #fefb41)",
+      },
+      backgroundImage: {
+        flor: "url(/Prod1.webp)",
+      },
+    },
   },
   plugins: [],
-}
-
+};

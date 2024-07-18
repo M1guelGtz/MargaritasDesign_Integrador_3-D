@@ -2,7 +2,7 @@ import Href from "../Atoms/HRef";
 function Nav (props){
     
     return(
-        <div className="flex-wrap flex w-full justify-evenly  h-32  ">
+        <div className="flex-wrap flex w-full justify-evenly shadow-[0px_0px_5px_5px_#482D2E] ">
             <Href imagen='Home.png' text='Inicio' ruta='/home'></Href>
             <Href imagen='/Productos.png ' ruta='/productos' text='Productos'></Href>
             <Href imagen='/Clientes.png' ruta='/clientes' text='Clientes'></Href>
