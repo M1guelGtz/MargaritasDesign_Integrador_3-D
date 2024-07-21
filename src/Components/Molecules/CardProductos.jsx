@@ -1,5 +1,5 @@
 import Swal from "sweetalert2";
-import Img from "../../pages/Img";
+import Img from "./Img";
 import Span from "../Atoms/Span";
 import Title from "../Atoms/Title";
 

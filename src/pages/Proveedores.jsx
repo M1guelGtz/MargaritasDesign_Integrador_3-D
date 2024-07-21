@@ -1,6 +1,6 @@
 import { Helmet } from "react-helmet-async";
-import SectionClientes from "../Components/Organisms/SectionClientes";
 import SectionNav from "../Components/Organisms/SectionNav";
+import SectionProv from "../Components/Organisms/SectionProv";
 function Proveedores () {
     return(
         <>
@@ -11,7 +11,7 @@ function Proveedores () {
         </Helmet>
         <div>
             <SectionNav></SectionNav>
-            <SectionClientes text='Proveedores'></SectionClientes>
+            <SectionProv text='proveedores'></SectionProv>
         </div>
         </>
     )
