@@ -1,12 +1,9 @@
 import Swal from "sweetalert2";
-import Img from "./Img";
+import Img from "../Atoms/Img";
 import Span from "../Atoms/Span";
 import Title from "../Atoms/Title";
-
 function CardProductos(props) {
-    
     let precio, cantidad
-
     async function handleClick() {
         const { value: text } = await Swal.fire({
             background: "#FDEBD0",
@@ -27,7 +24,6 @@ function CardProductos(props) {
             const { value: formValues } = await Swal.fire({
                 title: `${props.text} de ${props.tipo}`,
                 background: "#FDEBD0",
-                
                 html: `
                     <label> Precio: <br/>
                         <input type='number' value="${props.precio}"  required id="swal-input1" class="swal2-input">
@@ -100,7 +96,6 @@ function CardProductos(props) {
                 confirmButtonColor: "red",
                 width:"30%",
             });
-
             if (confirm) {
                 fetch(`${import.meta.env.VITE_URL_BACKEND}/productos/${props.id}`, {
                     method: "DELETE",
@@ -117,7 +112,7 @@ function CardProductos(props) {
                     throw new Error('Network response was not ok.');
                 })
                 .then(datos => {
-                    setData(datos);
+                    
                     console.log(datos)
                     props.fnVal(!props.val);
                 })
@@ -127,16 +122,16 @@ function CardProductos(props) {
                 Swal.fire({
                     background: "#FDEBD0",
                     title: "¡Producto eliminado!",
-                    icon: "sucggcess",
+                    icon: "success",
                 });
                 props.fnVal(!props.val)
             }
         }
     }
-
+    console.log(props.src)
     return (
         <div onClick={handleClick} className={props.style + "mx-auto  grid phone:w-3/4 tablet:w-full laptop:w-10/12 phone:grid-cols-2  border-2 border-[#FC9939] rounded-3xl bg-[#482D2E]"}>
-            <div className="w-5/6 box-border mx-auto"><Img img='Prod1.jpeg'></Img></div>
+            <div className="w-5/6 box-border mx-auto"><Img img={`https://margaritasdesignapi.integrador.xyz/uploads/${props.src}`}></Img></div>
             <div className="h-full flex flex-col items-center justify-around">
                 <Title text={`${props.text} de ${props.tipo}`} style='text-[#ffffff]'></Title>
                 <span className="text-4xl text-[#ffffff]" span>${props.precio}</span>
@@ -145,5 +140,4 @@ function CardProductos(props) {
         </div>
     );
 }
-
 export default CardProductos;

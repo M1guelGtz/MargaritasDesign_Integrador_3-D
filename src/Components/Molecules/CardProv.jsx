@@ -1,5 +1,5 @@
 import Swal from "sweetalert2";
-import Img from "./Img";
+import Img from "../Atoms/Img";
 import Span from "../Atoms/Span";
 import Title from "../Atoms/Title";
 function CardProv(props){
@@ -143,8 +143,8 @@ function CardProv(props){
     }
     return(
         <div onClick={handleClick} className={props.style + "mx-auto  grid phone:w-3/4 tablet:w-full laptop:w-10/12 phone:grid-cols-2  border-2 border-solid border-black rounded-3xl bg-gradient-to-r from-[#ffa31a]  to-[#ffa31a]"}>
-            <div className="w-5/6 mx-auto ">
-                <Img img='Prod1.jpeg'>{props}</Img>
+            <div className="w-4/6 mx-auto ">
+                <Img img='Cliente.png'>{props}</Img>
             </div>
             <div className="h-full flex flex-col items-center justify-around">
                 <Title text={props.nombre} style='text-3xl text-black'></Title>

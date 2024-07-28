@@ -1,6 +1,9 @@
+import { useContext } from "react";
+import UserContext from "../../Context/UserContext";
 import Href from "../Atoms/HRef";
+
 function Nav (props){
-    
+    const value = useContext(UserContext)
     return(
         <div className="flex-wrap flex w-full justify-evenly shadow-[0px_0px_5px_5px_#482D2E] ">
             <Href imagen='Home.png' text='Inicio' ruta='/home'></Href>
@@ -10,7 +13,7 @@ function Nav (props){
             <Href imagen='/Materia P.png' ruta='/materia-prima' text='Materia Prima'></Href>
             <Href imagen='/Ventas.png' ruta='/ventas' text='Ventas'></Href>
             <Href imagen='/Pedidos.png' ruta='/pedidos' text='Pedidos'></Href>
-            <Href imagen='Usario.png' text='Cerrar Sesion'></Href>
+            <Href imagen='Usario.png' ruta='/login' text={`${value.user.name} cerrar sesion`}></Href>
         </div>
     )
 }
