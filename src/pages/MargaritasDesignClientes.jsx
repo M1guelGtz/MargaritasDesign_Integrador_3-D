@@ -7,7 +7,7 @@ import FieldgDsign from "../Components/Molecules/FieldMargaritasD";
 import Foother from "../Components/Organisms/Foother";
 import SectionMarg from "../Components/Organisms/SectionMargDesign";
 import UserContext from "../Context/UserContext";
-import CardProductosCarrito from "./CardProductosCarrito";
+import CardProductosCarrito from "./CardsProductosCarrito";
 function MargaritasDesignCliente(){
     const value = useContext(UserContext)
     const [carrito, setCarrito] = useState(false)
