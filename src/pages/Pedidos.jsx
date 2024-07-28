@@ -1,5 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import SectionNav from "../Components/Organisms/SectionNav";
+import SectionPedidos from "../Components/Organisms/SectionPedidos";
 function Pedidos () {
     return(
         <>
@@ -10,6 +11,7 @@ function Pedidos () {
         </Helmet>
         <div>
             <SectionNav></SectionNav>
+            <SectionPedidos></SectionPedidos>
         </div>
         </>
     )

@@ -1,5 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import SectionNav from "../Components/Organisms/SectionNav";
+import SectionReporteVentas from "../Components/Organisms/SectionReporteVentas";
+import SectionVentas from "../Components/Organisms/SectionVentas";
 function Ventas () {
     return(
         <>
@@ -8,9 +10,12 @@ function Ventas () {
                 Margarita´s Design | Ventas
             </title>
         </Helmet>
-        <div>
+        <div className="w-full flex flex-col items-center">
             <SectionNav></SectionNav>
+            <SectionVentas></SectionVentas>
+            <SectionReporteVentas></SectionReporteVentas>
         </div>
+        
         </>
     )
 }
