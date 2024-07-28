@@ -1,18 +1,19 @@
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import FieldTablaMP from "../Molecules/FieldTablaMP";
+import FieldTablaPedidos from "../Molecules/FieldTablaPedidos";
 import TablaElements from "../Molecules/TablaElements";
-function SecMateriaPr(props) {
+function SectionPedidos(props) {
+  let nombre, direccion, telefono, correo, descripcion;
+  let select, selectE;
   const [data, setData] = useState([]);
-  const [bandera, setBandera] = useState(false);
-  let nombre, telefono, descripcion, direccion, correo;
-
+  const [bandera, setBandera] = useState(true);
+  const [val, setVal] = useState("");
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_URL_BACKEND}/materia_prima`, {
+    fetch(`${import.meta.env.VITE_URL_BACKEND}/pedidos`, {
       method: "GET",
       headers: {
+        Authorization: `${sessionStorage.getItem("token")}`,
         "Content-Type": "application/json",
-        authorization: `${sessionStorage.getItem("token")}`,
         "Access-Control-Allow-Origin": "*",
       },
     })
@@ -28,28 +29,36 @@ function SecMateriaPr(props) {
         console.log(error);
       });
   }, [bandera]);
-  async function modalAddProv() {
+  async function handlerClick() {
     const { value: formValues } = await Swal.fire({
-      title: `${props.text}`,
+      //--------------- * Pantalla modal para editar el pedido * -----------
+      title: `Registro de Pedidos`,
       background: "#FDEBD0",
       showCloseButton: "close",
+      width: "30%",
       html: `
-                <div class="form-group">
-                        <label for="swal-input6">Nombre:
+                <form class="form-group">
+                        <label for="swal-input6">Producto:
                             <input type='text' required id="swal-input6" class="swal2-input">
                         </label><br/>
-                        <label for="swal-input7">Cantidad:
+                        <label for="swal-input7">Ingresos :
                             <input type='number' required id="swal-input7" class="swal2-input">
                         </label><br/>
-                        <label for="swal-input8">Precio actual:
-                            <input type='text'   required id="swal-input8" class="swal2-input">
+                        <label for="swal-input8">Id del cliente:
+                            <input type='number'   required id="swal-input8" class="swal2-input">
                         </label><br/>
-                        <label for="swal-input9">Cantidad unitaria
-                            <input type='email'  required id="swal-input9" class="swal2-input">
-                        </label><br/>
-                        <label for="swal-input10">Detalles
-                            <input type='text'  required id="swal-input10" class="swal2-input">
-                        </label>`,
+                        <span>Estatus del pago:</span>
+                        <select id='pago-s' className='w-60 border-solid border border-black'>
+                            <option value="0">Incompleto</option>
+                            <option value="1">Completado</option>
+                        </select><br/>
+                        <span>Estatus del envio:</span>
+                        <select id='envio'>
+                            <option value="0">Incompleto</option>
+                            <option value="1">Completado</option>
+                        </select>
+                </form>
+                        `,
       showCancelButton: true,
       cancelButtonText: "<img src='icons8-cancelar-48.png'/>",
       cancelButtonColor: "transparent",
@@ -60,8 +69,16 @@ function SecMateriaPr(props) {
         nombre = document.getElementById("swal-input6").value;
         telefono = Number(document.getElementById("swal-input7").value);
         direccion = document.getElementById("swal-input8").value;
-        correo = document.getElementById("swal-input9").value;
-        descripcion = document.getElementById("swal-input10").value;
+        select = document.getElementById("pago-s");
+        select.addEventListener("change", () => {
+          var selectedOption = this.options[select.selectedIndex];
+          console.log(selectedOption.value + ": " + selectedOption.text);
+        });
+        selectE = document.getElementById("envio");
+        selectE.addEventListener("change", () => {
+          var selectedOption = this.options[select.selectedIndex];
+          console.log(selectedOption.value + ": " + selectedOption.text);
+        });
       },
     });
     if (formValues) {
@@ -71,7 +88,8 @@ function SecMateriaPr(props) {
         icon: "success",
         width: "30%",
       });
-      fetch(`${import.meta.env.VITE_URL_BACKEND}/materia_Prima`, {
+      console.log(select.value);
+      fetch(`${import.meta.env.VITE_URL_BACKEND}/pedidos`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -79,12 +97,12 @@ function SecMateriaPr(props) {
           "Access-Control-Allow-Origin": "*",
         },
         body: JSON.stringify({
-          nombre: nombre,
-          cantidad: telefono,
-          precio_actual: direccion,
-          detalles: descripcion,
-          cantidad_unitaria: correo,
+          id_detalles: 1,
+          estatus_envio: select.value,
+          estatus_pago: selectE.value,
+          total: telefono,
           id_admin: 3,
+          id_cliente: direccion,
         }),
       })
         .then((response) => {
@@ -105,9 +123,9 @@ function SecMateriaPr(props) {
   return (
     <div className="w-full flex  flex-col items-center m- p-8">
       <div className=" w-full justify-evenly items-center text-3xl flex p-2 border border-black border-solid  ">
-        <h2 className="  w-11/12 text-center ">{props.text}</h2>
+        <h2 className="  w-11/12 text-center ">Pedidos</h2>
         <div className="w-1/12   justify-around">
-          <div onClick={modalAddProv}>
+          <div onClick={handlerClick}>
             <img className="w-1/2" src="Agregar.png" alt="" />
           </div>
         </div>
@@ -115,27 +133,32 @@ function SecMateriaPr(props) {
       <div className="w-11/12 mt-8">
         <div className="py-2 ">
           <TablaElements
-            uno="Id"
-            dos="Nombre"
-            tres="Cantidad"
-            cuatro="Precio actual"
-            cinco="Cantidad Unitaria"
+            uno="Fecha"
+            dos="Cliente"
+            tres="Estatus del Envio"
+            cuatro="Ingresos"
+            cinco="Estatus del pago"
           ></TablaElements>
         </div>
         <div className="overflow-hidden overflow-y-scroll h-56 border-solid border-black">
           <div>
             {data.map((element) => (
-              <FieldTablaMP
+              <FieldTablaPedidos
                 style="cursor-pointer w-full flex justify-evenly bg-gray-300"
                 val={bandera}
                 fnVal={setBandera}
-                precio={element.precio_actual}
+                total={element.total}
                 id={element.id}
-                cantidad={element.cantidad}
-                nombre={element.nombre}
-                cantidad_unitaria={element.cantidad_unitaria}
-                descripcion={element.detalles}
-              ></FieldTablaMP>
+                fecha={element.fecha}
+                estatus_pago={
+                  element.estatus_pago == 0 ? "Pendiente" : "completado"
+                }
+                id_cliente={element.id_cliente}
+                estatus_envio={
+                  element.estatus_envio == 0 ? "Pendiente" : "Completado"
+                }
+                detalles={element.detalles}
+              ></FieldTablaPedidos>
             ))}
           </div>
         </div>
@@ -143,4 +166,4 @@ function SecMateriaPr(props) {
     </div>
   );
 }
-export default SecMateriaPr;
+export default SectionPedidos;

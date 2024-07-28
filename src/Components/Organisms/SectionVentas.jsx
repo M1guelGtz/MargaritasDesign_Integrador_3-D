@@ -1,18 +1,17 @@
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import FieldTablaMP from "../Molecules/FieldTablaMP";
-import TablaElements from "../Molecules/TablaElements";
-function SecMateriaPr(props) {
+import FieldTablaVentas from "../Molecules/FieldTablaVentas";
+import TablaElementsVentas from "../Molecules/TablaElementsVentas";
+function SectionVentas(props) {
+  let nombre, telefono, direccion, correo, descripcion;
   const [data, setData] = useState([]);
-  const [bandera, setBandera] = useState(false);
-  let nombre, telefono, descripcion, direccion, correo;
-
+  const [bandera, setBandera] = useState(true);
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_URL_BACKEND}/materia_prima`, {
+    fetch(`${import.meta.env.VITE_URL_BACKEND}/ventas`, {
       method: "GET",
       headers: {
+        Authorization: `${sessionStorage.getItem("token")}`,
         "Content-Type": "application/json",
-        authorization: `${sessionStorage.getItem("token")}`,
         "Access-Control-Allow-Origin": "*",
       },
     })
@@ -28,28 +27,24 @@ function SecMateriaPr(props) {
         console.log(error);
       });
   }, [bandera]);
-  async function modalAddProv() {
+  console.log(data);
+  async function handlerClick() {
     const { value: formValues } = await Swal.fire({
-      title: `${props.text}`,
+      title: ` Registro de ventas`,
       background: "#FDEBD0",
       showCloseButton: "close",
       html: `
                 <div class="form-group">
-                        <label for="swal-input6">Nombre:
-                            <input type='text' required id="swal-input6" class="swal2-input">
+                        <label for="swal-input6">Id del cliente:
+                            <input type='number' required id="swal-input6" class="swal2-input">
                         </label><br/>
-                        <label for="swal-input7">Cantidad:
+                        <label for="swal-input7">Ingresos:
                             <input type='number' required id="swal-input7" class="swal2-input">
                         </label><br/>
-                        <label for="swal-input8">Precio actual:
+                        <label for="swal-input8">Producto:
                             <input type='text'   required id="swal-input8" class="swal2-input">
                         </label><br/>
-                        <label for="swal-input9">Cantidad unitaria
-                            <input type='email'  required id="swal-input9" class="swal2-input">
-                        </label><br/>
-                        <label for="swal-input10">Detalles
-                            <input type='text'  required id="swal-input10" class="swal2-input">
-                        </label>`,
+                        `,
       showCancelButton: true,
       cancelButtonText: "<img src='icons8-cancelar-48.png'/>",
       cancelButtonColor: "transparent",
@@ -57,11 +52,9 @@ function SecMateriaPr(props) {
       confirmButtonColor: "transparent",
       focusConfirm: false,
       preConfirm: () => {
-        nombre = document.getElementById("swal-input6").value;
+        nombre = Number(document.getElementById("swal-input6").value);
         telefono = Number(document.getElementById("swal-input7").value);
         direccion = document.getElementById("swal-input8").value;
-        correo = document.getElementById("swal-input9").value;
-        descripcion = document.getElementById("swal-input10").value;
       },
     });
     if (formValues) {
@@ -71,7 +64,7 @@ function SecMateriaPr(props) {
         icon: "success",
         width: "30%",
       });
-      fetch(`${import.meta.env.VITE_URL_BACKEND}/materia_Prima`, {
+      fetch(`${import.meta.env.VITE_URL_BACKEND}/ventas`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -79,11 +72,9 @@ function SecMateriaPr(props) {
           "Access-Control-Allow-Origin": "*",
         },
         body: JSON.stringify({
-          nombre: nombre,
-          cantidad: telefono,
-          precio_actual: direccion,
-          detalles: descripcion,
-          cantidad_unitaria: correo,
+          detalles: direccion,
+          ingresos: telefono,
+          id_cliente: nombre,
           id_admin: 3,
         }),
       })
@@ -105,42 +96,42 @@ function SecMateriaPr(props) {
   return (
     <div className="w-full flex  flex-col items-center m- p-8">
       <div className=" w-full justify-evenly items-center text-3xl flex p-2 border border-black border-solid  ">
-        <h2 className="  w-11/12 text-center ">{props.text}</h2>
+        <h2 className="  w-11/12 text-center ">Registro de ventas</h2>
         <div className="w-1/12   justify-around">
-          <div onClick={modalAddProv}>
+          <div onClick={handlerClick}>
             <img className="w-1/2" src="Agregar.png" alt="" />
           </div>
         </div>
       </div>
       <div className="w-11/12 mt-8">
         <div className="py-2 ">
-          <TablaElements
+          <TablaElementsVentas
             uno="Id"
-            dos="Nombre"
-            tres="Cantidad"
-            cuatro="Precio actual"
-            cinco="Cantidad Unitaria"
-          ></TablaElements>
+            dos="Fecha"
+            tres="Cliente"
+            cuatro="Ingresos"
+          ></TablaElementsVentas>
         </div>
         <div className="overflow-hidden overflow-y-scroll h-56 border-solid border-black">
           <div>
-            {data.map((element) => (
-              <FieldTablaMP
-                style="cursor-pointer w-full flex justify-evenly bg-gray-300"
-                val={bandera}
-                fnVal={setBandera}
-                precio={element.precio_actual}
-                id={element.id}
-                cantidad={element.cantidad}
-                nombre={element.nombre}
-                cantidad_unitaria={element.cantidad_unitaria}
-                descripcion={element.detalles}
-              ></FieldTablaMP>
-            ))}
+            {data != null
+              ? data.map((element) => (
+                  <FieldTablaVentas
+                    style="cursor-pointer w-full flex justify-evenly bg-gray-300"
+                    val={bandera}
+                    fnVal={setBandera}
+                    precio={element.ingresos}
+                    id={element.id}
+                    cantidad={element.id_cliente}
+                    nombre={element.fecha}
+                    descripcion={element.detalles}
+                  ></FieldTablaVentas>
+                ))
+              : "Sin datos por cargar"}
           </div>
         </div>
       </div>
     </div>
   );
 }
-export default SecMateriaPr;
+export default SectionVentas;
