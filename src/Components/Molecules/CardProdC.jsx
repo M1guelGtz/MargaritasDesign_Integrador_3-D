@@ -12,7 +12,7 @@ function CardProductosC(props) {
             width:"30%",
             html: `
                 <div className='w-20'>
-                    <img  src="Prod1.jpg"/>
+                    <img  src="https://margaritasdesignapi.integrador.xyz/uploads/${props.src}"/>
                 </div >
                 <span>$${props.precio}</span><br/><br/>
                 <span>Cantidad en existencia: ${props.cantidad}</span><br/><br/>
@@ -53,6 +53,9 @@ function CardProductosC(props) {
                 console.log(error)
             })
         }
+    }
+    if(props.cantidad < 1){
+        return
     }
     return (
         <div onClick={handleClick} className={props.style + "mx-auto  grid phone:w-3/4 tablet:w-full laptop:w-10/12 phone:grid-cols-2  border-2 border-[#FC9939] rounded-3xl bg-[#482D2E]"}>

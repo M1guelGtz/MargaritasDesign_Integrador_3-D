@@ -143,7 +143,7 @@ function CardProv(props){
     }
     return(
         <div onClick={handleClick} className={props.style + "mx-auto  grid phone:w-3/4 tablet:w-full laptop:w-10/12 phone:grid-cols-2  border-2 border-solid border-black rounded-3xl bg-gradient-to-r from-[#ffa31a]  to-[#ffa31a]"}>
-            <div className="w-4/6 mx-auto ">
+            <div className="w-3/6  mx-auto ">
                 <Img img='Cliente.png'>{props}</Img>
             </div>
             <div className="h-full flex flex-col items-center justify-around">

@@ -3,7 +3,6 @@ import Details from "../Molecules/FieldHome";
 function FieldHome() {
   const [dataMateriaP, setDataM] = useState([]);
   const [banderaH, setBanderaH] = useState(false);
-  const [notificaciones, setNotificaciones] = useState([]);
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_URL_BACKEND}/ventas/home/notificaciones`, {
@@ -25,7 +24,6 @@ function FieldHome() {
         console.log(error);
       });
   }, [banderaH]);
-  console.log(dataMateriaP)
   return (
     <div className="flex w-full  h-2/3 flex-wrap justify-evenly">
       <h2 className="w-full justify-center m-8 items-center text-3xl flex p-2 border  border-black border-solid">

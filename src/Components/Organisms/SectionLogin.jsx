@@ -25,7 +25,7 @@ function SectionLogin() {
       navigate("/registro");
     }
   }
-  const handlerClick = (e) => {
+  async function getToken(){
     fetch(`${import.meta.env.VITE_URL_BACKEND}/auth/login`, {
       method: "POST",
       headers: {
@@ -38,18 +38,26 @@ function SectionLogin() {
       }),
     })
       .then((response) => {
-        if (response.ok) return response.headers;
+        if (response.ok) return response.headers
       })
-      .then((datos) => {
-        const token = datos.get("Authorization");
-        console.log(datos.get("Authorization"));
-        sessionStorage.setItem("token", token);
-        console.log(token);
+      .then(datos => {
+        if(datos.get("Authorization")!=null){
+          const token = datos.get("Authorization")
+          console.log(datos.get("Authorization"));
+          sessionStorage.setItem("token", token);
+          console.log(token);
+        }else{
+          console.log("token no recibido")
+          console.log(datos)
+        }
       })
       .catch((error) => {
         console.log(error);
         alertF();
       });
+  }
+  const handlerClick = (e) => {
+    getToken()
     fetch(`${import.meta.env.VITE_URL_BACKEND}/auth/login`, {
       method: "POST",
       headers: {

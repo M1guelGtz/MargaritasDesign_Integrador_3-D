@@ -13,7 +13,7 @@ function Nav (props){
             <Href imagen='/Materia P.png' ruta='/materia-prima' text='Materia Prima'></Href>
             <Href imagen='/Ventas.png' ruta='/ventas' text='Ventas'></Href>
             <Href imagen='/Pedidos.png' ruta='/pedidos' text='Pedidos'></Href>
-            <Href imagen='Usario.png' ruta='/login' text={`${value.user.name} cerrar sesion`}></Href>
+            <Href imagen='Usario.png' ruta='/login' text={`| ${value.user.name} | cerrar sesion`}></Href>
         </div>
     )
 }

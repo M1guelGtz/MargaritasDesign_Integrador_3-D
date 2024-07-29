@@ -172,11 +172,11 @@ function MargaritasDesignCliente(){
                 <div className={`w-full flex justify-end h-screen bg-[#00000038] transition-transform duration-500 translate-x-0 fixed inset-0 z-10  ${carrito ?  "translate-x-0 fixed" : "translate-x-full"}`}>
                     <div className="w-1/2 h-3/4 shadow-black rounded-l-3xl bg-[#FFF9E3] ">
                         <div className="w-full border-4 border-black h-[15%] flex items-center justify-center shadow-2xl bg-[#FFDE59]"> 
-                            <Title text="Tu Carrito"></Title>
+                            <Title text={`Tu Carrito ${value.user.name}`}></Title>
                         </div>
                         <div className="overflow-hidden m-5 overflow-y-scroll h-3/4 border-4 border-black p-5">
                             {
-                                carrito2 == null ? "carrito vacio" : carrito2.map(element =>  <CardProductosCarrito src={element.filename} val={bandera}   fnVal={setBandera}  style="cursor-pointer justify-evenly items-center  h-48  " id={element.id} text={ element.nombre} tipo={element.tipo} precio={ element.precio} cantidad={element.cantidad} descripcion={'Acabado ' + element.acabado} ></CardProductosCarrito>)
+                                carrito2 == null ? "Su carrito esta vacio" : carrito2.map(element =>  <CardProductosCarrito src={element.filename} val={bandera}   fnVal={setBandera}  style="cursor-pointer justify-evenly items-center  h-48  " id={element.id} text={ element.nombre} tipo={element.tipo} precio={ element.precio} cantidad={element.cantidad} descripcion={'Acabado ' + element.acabado} ></CardProductosCarrito>)
                             }
                             {
                                 carrito2 == null ? "" : carrito2.forEach(element => {
