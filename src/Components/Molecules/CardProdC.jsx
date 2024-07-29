@@ -48,7 +48,6 @@ function CardProductosC(props) {
                 }
             ).then(
                 data => {
-                    console.log(data)
                 }
             ).catch(error =>{
                 console.log(error)

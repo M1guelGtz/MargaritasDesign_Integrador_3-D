@@ -12,7 +12,7 @@ function SectionPedidos(props) {
     fetch(`${import.meta.env.VITE_URL_BACKEND}/pedidos`, {
       method: "GET",
       headers: {
-        Authorization: `${sessionStorage.getItem("token")}`,
+        "Authorization": `${sessionStorage.getItem("token")}`,
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
       },
@@ -23,11 +23,12 @@ function SectionPedidos(props) {
       .then((datos) => {
         setData(datos);
         setBandera(true);
-        console.log(data);
       })
       .catch((error) => {
         console.log(error);
       });
+      
+
   }, [bandera]);
   async function handlerClick() {
     const { value: formValues } = await Swal.fire({

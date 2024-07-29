@@ -16,8 +16,7 @@ function SectionClientes(props) {
         if (response.ok) return response.json();
       })
       .then((datos) => {
-        setData(datos);
-        console.log(data);
+        setData(datos)
         setBandera(true);
       })
       .catch((error) => {

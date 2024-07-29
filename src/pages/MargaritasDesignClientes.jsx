@@ -15,7 +15,6 @@ function MargaritasDesignCliente(){
     const [bandera, setBandera] = useState(false)
     const [cliente, setCliente] = useState({})
     const [pedido, setPedido] = useState(null)
-    //const [total, setTotal] = useState(0);
     let total = 0;
     let suma
     useEffect(()=>{
@@ -29,7 +28,6 @@ function MargaritasDesignCliente(){
             if(response.ok)
                 return response.json()
         }).then (datos => {
-            console.log(datos[0])
             setCliente(datos[0])
             
         }).catch(
@@ -58,110 +56,114 @@ function MargaritasDesignCliente(){
         )
         },[bandera]
     );
-    function handleClick(){
-        setCarrito(!carrito)
-        setBandera(!bandera)
-    }
-    async function handelClickCompra(){
-        const { value: text } = await Swal.fire({
-            width:"35%",
-            "title": "Realizar pedido",
-            "icon": "info",
-            html:`<span> Clave interbancaria: (clave) </span><br/>
-                <span> telefono: (telefono) </span><br/><br/>
-                <span> su pedido sera enviado despues mandar el comprobante de pago al numero telefonico proporcionado </span>`,
-            "cancelButtonText": "Cancelar",
-            "showCancelButton": true,
-            "confirmButtonColor":"green",
-            "cancelButtonColor": "red",
-            "confirmButtonText": "Confirmar",
-        });
-        if(text){
-            Swal.fire({
-                "confirmButtonColor":"green",
-                "confirmButtonText": "Terminar",
-                width: "35%",
-                title: "Pedido realizado con exito",
-                icon: "success",
-                text: "SE LE RECOMIENDA REALIZAR EL PAGO EN UN PERIODO NO MAYOR A 6 DIAS PARA GARANTIZAR LA EXISTENCIA DEL PRODUCTO",
-            })
-            //-------------------------------Eliminar lo productos del carrito y hacer un post de pedido/------------------***//
-            fetch(`${import.meta.env.VITE_URL_BACKEND}/pedidos`,{
+    async function realizarPedido() {
+        try {
+            const response = await fetch(`${import.meta.env.VITE_URL_BACKEND}/pedidos`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'authorization': `${sessionStorage.getItem("token")}`,
                     'Access-Control-Allow-Origin': '*'
-                    },
-                    body: JSON.stringify({
-                        "estatus_envio": 0,
-                        "estatus_pago": 0,
-                        "total": total, 
-                        "id_admin": 3,
-                        "id_cliente": cliente.id
-                    })
-                }
-            ).then (response => {
-                if(response.ok)
-                    return response.json()
-            }).then (datos => {
-                setPedido(datos)
-                console.log(datos)
-                
-            }).catch(
-                error=>{
-                    console.log(error)
-                }
-            )
-            carrito2.map(
-                item => {
-                    fetch(`${import.meta.env.VITE_URL_BACKEND}/detalle_pedidos`,{
+                },
+                body: JSON.stringify({
+                    "estatus_envio": 0,
+                    "estatus_pago": 0,
+                    "total": total,
+                    "id_admin": 3,
+                    "id_cliente": value.user.id
+                })
+            });
+    
+            if (!response.ok) {
+                throw new Error('Error al crear el pedido');
+            }
+    
+            const datos = await response.json();
+            setPedido(datos);
+            return datos; // Devuelve el pedido creado
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+    
+    async function handelClickCompra() {
+        const { value: text } = await Swal.fire({
+            width: "35%",
+            title: "Realizar pedido",
+            icon: "info",
+            html: `<span> Clave interbancaria: (clave) </span><br/>
+                <span> telefono: (telefono) </span><br/><br/>
+                <span> su pedido sera enviado despues mandar el comprobante de pago al numero telefonico proporcionado </span>`,
+            cancelButtonText: "Cancelar",
+            showCancelButton: true,
+            confirmButtonColor: "green",
+            cancelButtonColor: "red",
+            confirmButtonText: "Confirmar",
+        });
+    
+        if (text) {
+            Swal.fire({
+                confirmButtonColor: "green",
+                confirmButtonText: "Terminar",
+                width: "35%",
+                title: "Pedido realizado con exito",
+                icon: "success",
+                text: "SE LE RECOMIENDA REALIZAR EL PAGO EN UN PERIODO NO MAYOR A 6 DIAS PARA GARANTIZAR LA EXISTENCIA DEL PRODUCTO",
+            });
+    
+            try {
+                const nuevoPedido = await realizarPedido();
+    
+                // Agregar detalles del pedido
+                for (const item of carrito2) {
+                    await fetch(`${import.meta.env.VITE_URL_BACKEND}/detalle_pedidos`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                             'authorization': `${sessionStorage.getItem("token")}`,
                             'Access-Control-Allow-Origin': '*'
-                            },
-                            body: JSON.stringify({
-                                "id_pedido": pedido.id,
-                                "id_producto": item.id,
-                                "cantidad": item.cantidad
-                            })
-                        }
-                    ).then (response => {
-                        if(response.ok)
-                            return response.json()
-                    }).then (datos => {
-                        setPedido(datos)
-                        
-                        
-                    }).catch(
-                        error=>{
-                            console.log(error)
-                        }
-                    )
+                        },
+                        body: JSON.stringify({
+                            "id_pedido": nuevoPedido.id,
+                            "id_producto": item.id,
+                            "cantidad": item.cantidad
+                        })
+                    });
                 }
-            )
-            fetch(`${import.meta.env.VITE_URL_BACKEND}/carrito_productos/productos/carrito/${cliente.id}`,{
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'authorization': `${sessionStorage.getItem("token")}`,
-                    'Access-Control-Allow-Origin': '*'
-                    },
-                    
-                }
-            ).then (response => {
-                if(response.ok)
-                    return response.json()
-            }).then (datos => {
-            }).catch(
-                error=>{
-                    console.log(error)
-                }
-            )
+    
+                // Eliminar productos del carrito
+                await fetch(`${import.meta.env.VITE_URL_BACKEND}/carrito_productos/productos/carrito/${cliente.id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'authorization': `${sessionStorage.getItem("token")}`,
+                        'Access-Control-Allow-Origin': '*'
+                    }
+                });
+    
+                // Limpiar carrito
+                await fetch(`${import.meta.env.VITE_URL_BACKEND}/carritos/clean/${cliente.id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'authorization': `${sessionStorage.getItem("token")}`,
+                        'Access-Control-Allow-Origin': '*'
+                    }
+                });
+    
+                // Actualiza bandera para refrescar la vista
+                setBandera(!bandera);
+    
+            } catch (error) {
+                console.log(error);
+            }
         }
-
+    }
+    
+    function handleClick(){
+        setCarrito(!carrito)
+        setBandera(!bandera)
     }
     return(
         <>

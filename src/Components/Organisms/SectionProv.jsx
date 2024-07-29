@@ -96,7 +96,6 @@ function SectionProv(props) {
       .then((datos) => {
         setData(datos);
         setBandera(true);
-        console.log(data);
       })
       .catch((error) => {
         console.log(error);
@@ -105,8 +104,8 @@ function SectionProv(props) {
   return (
     <div>
       <div className=" flex flex-wrap w-full dekstop:justify-center   ">
-        <div className=" bg-gradient-to-r from-[#ffa31a]  via-[#ffa31a] to-[#ffa31a] w-full justify-evenly box-border m-8  items-center text-3xl flex p-2 border border-[#482D2E] border-solid  ">
-          <h2 className=" capitalize font-extrabold  w-11/12 text-center ">
+        <div className="  w-full justify-evenly box-border m-8  items-center text-3xl flex p-2 border border-[#482D2E] border-solid  ">
+          <h2 className=" capitalize   w-11/12 text-center ">
             {props.text}
           </h2>
           <div className="w-1/12   justify-around">

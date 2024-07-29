@@ -1,12 +1,35 @@
+import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import Celda from "../Atoms/Celda";
 function FieldTablaPedidos(props){
+    const [data, setData] = useState([])
+    const [bandera, setBandera] = useState(false)
+    useEffect(()=>{
+        fetch(`${import.meta.env.VITE_URL_BACKEND}/detalle_pedidos/${props.id}`, {
+            method: "GET",
+            headers: {
+              Authorization: `${sessionStorage.getItem("token")}`,
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+            },
+          })
+            .then((response) => {
+              if (response.ok) return response.json();
+            })
+            .then((datos) => {
+              setData(datos);
+              setBandera(true)
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        },[bandera]
+    )
     async function handkerClick(){
         let pago, envio;
         const { value: text } = await Swal.fire({
-            //------------- * Pantalla modal con info del producto * -----------//
             background: "#FDEBD0",
-            title: `${props.detalles }`,
+            title: `Pedido del cliente con id "${props.id_cliente}"`,
             html: `
                 <span>ingresos: $${props.total }</span><br><br>
                 <span>pago:  ${props.estatus_pago}</span><br><br>
@@ -25,8 +48,7 @@ function FieldTablaPedidos(props){
         }
         if (text) {
             const { value: formValues,} = await Swal.fire({
-                //--------------- * Pantalla modal para editar el producto * -----------
-                title: `${props.detalles}`,
+                title: `Editando estatus del cliente con id ${props.id_cliente}`,
                 background: "#FDEBD0",
                 showCloseButton:"close",
                 html: `
@@ -113,8 +135,7 @@ function FieldTablaPedidos(props){
             return
         }else  {
             const { value: confirm } = await Swal.fire({
-                //------------- * Pantalla modal confirmar eliminacio * -----------//
-                title: `Seguro que desea eliminar ${props.nombre}`,
+                title: `Seguro que desea eliminar`,
                 icon: "warning",
                 showCloseButton:"close",
                 showCancelButton: true,
@@ -137,7 +158,6 @@ function FieldTablaPedidos(props){
                         return response.json()
                     }).then (datos => {
                         setData(datos)
-                        //console.log(data)
                         props.fnVal(!props.val)
                     }).catch(
                         error=>{
@@ -163,7 +183,7 @@ function FieldTablaPedidos(props){
                     <Celda text={props.estatus_envio}></Celda>
                     <Celda text={props.estatus_pago}></Celda>
                     <Celda text={'$' + props.total}></Celda>
-                    <Celda text={props.detalles}></Celda>
+                    <Celda text={null} data={data}></Celda>
             </div>
         )
     }else{
@@ -174,7 +194,7 @@ function FieldTablaPedidos(props){
                     <Celda text={props.estatus_envio}></Celda>
                     <Celda text={props.estatus_pago}></Celda>
                     <Celda text={'$' + props.total}></Celda>
-                    <Celda text={props.detalles}></Celda>
+                    <Celda text={null} data={data}></Celda>
             </div>
         )
     }

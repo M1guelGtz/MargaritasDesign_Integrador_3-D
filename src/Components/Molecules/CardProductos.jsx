@@ -67,7 +67,6 @@ function CardProductos(props) {
                         "precio":   Number(precio),
                         "cantidad": Number(cantidad),
                         "acabado": `${props.acabado}`,
-                        "id_imagen" : 2,
                     }),
                 })
                 .then(response => {
@@ -118,6 +117,11 @@ function CardProductos(props) {
                 })
                 .catch(error => {
                     console.error('Error al intentar eliminar el producto:', error);
+                    Swal.fire({
+                        background: "#FDEBD0",
+                        title: "¡Producto no eliminado!",
+                        icon: "error",
+                    });
                 });
                 Swal.fire({
                     background: "#FDEBD0",
@@ -128,7 +132,6 @@ function CardProductos(props) {
             }
         }
     }
-    console.log(props.src)
     return (
         <div onClick={handleClick} className={props.style + "mx-auto  grid phone:w-3/4 tablet:w-full laptop:w-10/12 phone:grid-cols-2  border-2 border-[#FC9939] rounded-3xl bg-[#482D2E]"}>
             <div className="w-5/6 box-border mx-auto"><Img img={`https://margaritasdesignapi.integrador.xyz/uploads/${props.src}`}></Img></div>

@@ -2,7 +2,6 @@ import Span from "../Atoms/Span"
 import Title from "../Atoms/Title"
 
 function FieldRepV(props){
-    console.log(props.data)
     return(
         <div className=" border-solid flex flex-col justify-between m-5 rounded-t-2xl h-80 bg-[#FFF5C3]   border w-1/4">
             <Title style='border-2 border-solid border-black rounded-t-2xl bg-[#FFF2F2]' text={props.title}></Title>

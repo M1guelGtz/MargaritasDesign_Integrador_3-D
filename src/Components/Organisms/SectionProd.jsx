@@ -26,7 +26,7 @@ function SectionProd(props){
     return (
         <div>
             <div className=" flex flex-wrap w-full dekstop:justify-center   ">
-                <div className=" bg-gradient-to-r       w-full justify-evenly box-border m-8  items-center text-3xl flex p-2 border border-[#482D2E] border-solid  "><h2 className="text-[#482D2E] font-extrabold  w-11/12 text-center ">Productos</h2>
+                <div className=" bg-gradient-to-r       w-full justify-evenly box-border m-8  items-center text-3xl flex p-2 border border-[#482D2E] border-solid  "><h2 className="text-[#482D2E]  w-11/12 text-center ">Productos</h2>
                     <div className="w-1/12   justify-around">
                         <Link to='/agregar_producto'><img  className="w-1/2" src="Agregar.png"/></Link>
                     </div>

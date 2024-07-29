@@ -43,7 +43,7 @@ export default function SectionRegistro() {
       mostrarError("Ingrese un correo electrónico válido.");
       return false;
     }
-    if (!telefono.trim() || telefono <= 0) {
+    if (!telefono.trim() || telefono <= 0 || telefono.length < 10) {
       mostrarError("Ingrese un número telefónico válido.");
       return false;
     }
@@ -101,7 +101,7 @@ export default function SectionRegistro() {
   };
 
   return (
-    <div className=" text-center flex justify-evenly flex-col w-full rounded-xl h-full border-black border-solid  m-5 border-2  backdrop-opacity-20 backdrop-invert bg-white/10">
+    <div className=" text-center flex justify-evenly flex-col w-full rounded-xl h-full border-black border-solid  m-5 border-2  backdrop-opacity-30 backdrop-invert bg-white/30">
       <h1 className="text-3xl ">
         Bienvenido a <br /> "Diseños Margarita"{" "}
       </h1>
@@ -113,24 +113,24 @@ export default function SectionRegistro() {
             <FieldLogIn
               type="text"
               text="Ingrese su nombre de usuario: "
-              style="w-1/4 rounded-2xl bg-[#f5deb38c] "
-              styleI="text-lg border-b border-black"
+              style="backdrop-opacity-30 backdrop-invert border border-black bg-white/50 relative border-b-2 w-1/4 rounded-lg  border-black border-solid "
+              styleI="text-lg  border-black"
               val={username}
               fnVal={setNombre}
             />
             <FieldLogIn
               type="text"
               text="Ingrese su apellido paterno: "
-              style="w-1/4 rounded-2xl bg-[#f5deb38c] "
-              styleI="border-b text-lg border-black"
+              style="backdrop-opacity-30 backdrop-invert border border-black bg-white/50 relative border-b-2 w-1/4 rounded-lg  border-black border-solid "
+              styleI="text-lg  border-black"
               val={apellido_paterno}
               fnVal={setApeP}
             />
             <FieldLogIn
               type="text"
               text="Ingrese su apellido materno: "
-              style="w-1/4 rounded-2xl bg-[#f5deb38c] "
-              styleI="border-b text-lg border-black"
+              style="backdrop-opacity-30 backdrop-invert border border-black bg-white/50 relative border-b-2 w-1/4 rounded-lg  border-black border-solid "
+              styleI="text-lg  border-black"
               val={apellido_materno}
               fnVal={setApeM}
             />
@@ -138,25 +138,25 @@ export default function SectionRegistro() {
           <div className="w-full flex justify-evenly items-center h-full flex-row">
             <FieldLogIn
               type="password"
-              text="Ingrese una contraseña"
-              style="w-1/4 rounded-2xl bg-[#f5deb38c] "
-              styleI="border-b border-black text-lg"
+              text="Ingrese una contraseña:"
+              style="backdrop-opacity-30 backdrop-invert border border-black bg-white/50 relative border-b-2 w-1/4 rounded-lg  border-black border-solid "
+              styleI="text-lg  border-black"
               val={password}
               fnVal={setPassword}
             />
             <FieldLogIn
               type="email"
               text="Ingrese su correo electrónico:"
-              style="w-1/4  rounded-2xl bg-[#f5deb38c]"
-              styleI="border-b border-black text-lg"
+              style="backdrop-opacity-30 border border-black backdrop-invert bg-white/50 relative border-b-2 w-1/4 rounded-lg  border-black border-solid "
+              styleI="text-lg  border-black"
               val={correo_electronico}
               fnVal={setCorreo}
             />
             <FieldLogIn
               type="number"
               text="Ingrese su número telefónico: "
-              style="w-1/4  rounded-2xl bg-[#f5deb38c]"
-              styleI="border-b border-black text-lg"
+              style=" backdrop-opacity-30 border border-black backdrop-invert bg-white/50 relative border-b-2 w-1/4 rounded-lg  border-black border-solid "
+              styleI="text-lg backdrop-opacity-0 backdrop-invert bg-white/40  rounded-lg border-black"
               val={telefono}
               fnVal={setTelefono}
             />
@@ -164,15 +164,16 @@ export default function SectionRegistro() {
           <FieldLogIn
             type="text"
             text="Ingrese su direccion: "
-            style="w-3/4   rounded-2xl bg-[#f5deb38c] "
-            styleI="border-b border-black text-lg"
+            style="laptop:(backdrop-opacity-30 border border-black backdrop-invert bg-white/50  relative border-b-2 w-5/6 rounded-lg  border-black border-solid )"
+            styleI="text-lg backdrop-opacity-0 backdrop-invert bg-white/40  rounded-lg border-black"
             val={direccion}
             fnVal={setDireccion}
           ></FieldLogIn>
         </div>
-        <div className="flex justify-center p-2 w-full h-2/6 text-center">
+        <div className="flex justify-evenly items-center p-2 w-full h-2/6 text-center">
+        <a className="bg-white/60  text-[brown]/80 font-semibold  p-3 cursor-pointer rounded text-base border-2 border-transparent border-solid w-1/4 hover:bg-[#573f1bc4] hover:border-2 hover:border-white hover:text-white" href="/login">Regresar</a>
           <Button
-            style="bg-[#d4a54eee] m-10 text-black font-semibold p-3  cursor-pointer rounded text-base border-2 border-transparent border-solid w-1/2 hover:bg-[#7c5a288b] hover:border-2 hover:border-white hover:text-white"
+            style="bg-white text-[green]/50  font-semibold  p-3 cursor-pointer rounded text-base border-2 border-transparent border-solid w-1/4 hover:bg-[#573f1bc4] hover:border-2 hover:border-white hover:text-white"
             text="Registrarse"
             type="button"
             onClick={handlerClick}

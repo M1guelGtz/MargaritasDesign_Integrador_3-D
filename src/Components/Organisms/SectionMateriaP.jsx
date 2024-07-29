@@ -22,7 +22,6 @@ function SecMateriaPr(props) {
       .then((datos) => {
         setData(datos);
         setBandera(true);
-        console.log(data);
       })
       .catch((error) => {
         console.log(error);

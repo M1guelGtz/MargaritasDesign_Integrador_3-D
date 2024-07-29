@@ -131,7 +131,7 @@ function CardClientes (props) {
             }
         }
     return (
-        <div onClick={handkerClick} className="flex  justify-evenly items-center w-5/12 m-5 bg-gradient-to-r from-[#ffa31ac4]  to-[#ffa31adc] rounded-2xl border-solid border-2   border-black">
+        <div  className="flex  justify-evenly items-center w-5/12 m-5 bg-gradient-to-r from-[#ffa31ac4]  to-[#ffa31adc] rounded-2xl border-solid border-2   border-black">
             <div className="w-1/3 justify-evenly  items-center flex flex-col">
                 <Img img = 'Cliente.png'></Img>
                 <Span span={props.text}></Span>

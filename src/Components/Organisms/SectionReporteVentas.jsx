@@ -83,7 +83,6 @@ function SectionReporteVentas(props) {
         console.log(error);
       });
   }, [bandera]);
-  console.log(ventasGastos.detalles);
   return (
     <div className="w-full flex  flex-col items-center m- p-8">
       <div className=" w-full justify-evenly  items-center text-3xl flex  p-2 border border-black border-solid  ">
